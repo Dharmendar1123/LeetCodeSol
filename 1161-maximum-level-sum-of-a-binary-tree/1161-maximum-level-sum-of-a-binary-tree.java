@@ -14,35 +14,35 @@
  * }
  */
 class Solution {
-    public int maxLevelSum(TreeNode root) {
+    Map<Integer, Integer> map;
+    
+    public void dfs(TreeNode root, int level) {
         if (root == null) {
-            return 0;
+            return;
         }
-        Queue<TreeNode> que = new LinkedList<>();
-        que.offer(root);
-        int maxSum = Integer.MIN_VALUE;
-        int ans = 0;
-        int level = 1;
         
-        while (!que.isEmpty()) {
-            int n = que.size();
-            int sum = 0;
-            while (n-- > 0) {
-                TreeNode node = que.poll();
-                sum += node.val;
-                if (node.left != null) {
-                    que.offer(node.left);
-                }
-                if (node.right != null) {
-                    que.offer(node.right);
-                }
-            }
+        map.put(level, map.getOrDefault(level, 0) + root.val);
+        
+        dfs(root.left, level + 1);
+        dfs(root.right, level + 1);
+    }
+    
+    public int maxLevelSum(TreeNode root) {
+        map = new HashMap<>();
+        dfs(root, 1);
+        
+        int maxSum = Integer.MIN_VALUE;
+        int result = 0;
+        
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int level = entry.getKey();
+            int sum = entry.getValue();
+            
             if (sum > maxSum) {
-                    maxSum = sum;
-                    ans = level;
+                maxSum = sum;
+                result = level;
             }
-            level++;
         }
-        return ans;
+        return result;
     }
 }
