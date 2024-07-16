@@ -15,28 +15,6 @@
  */
 class Solution {
     
-    public TreeNode lowestCommonAncestor(TreeNode root, int s, int d) {
-        if (root == null) {
-            return null;
-        }
-        
-        if (root.val == s || root.val == d) {
-            return root;
-        }
-        
-        TreeNode l = lowestCommonAncestor(root.left, s, d);
-        TreeNode r = lowestCommonAncestor(root.right, s, d);
-        
-        if (l != null && r != null) {
-            return root;
-        }
-        
-        if  (l != null) {
-            return l;
-        }
-        return r;
-    }
-    
     public boolean findPath(TreeNode node, int target, StringBuilder path) {
         if (node == null) {
             return false;
@@ -62,21 +40,27 @@ class Solution {
     }
     
     public String getDirections(TreeNode root, int startValue, int destValue) {
-        TreeNode lca = lowestCommonAncestor(root, startValue, destValue);
         
         StringBuilder toStart = new StringBuilder();
         StringBuilder toDest = new StringBuilder();
         
-        findPath(lca, startValue, toStart);
-        findPath(lca, destValue, toDest);
+        findPath(root, startValue, toStart);
+        findPath(root, destValue, toDest);
+        
+        int l = 0;
+        while (l < toStart.length() && l < toDest.length() && toStart.charAt(l) == toDest.charAt(l)) {
+            l++;
+        }
         
         StringBuilder result = new StringBuilder();
         
-        for (int i = 0; i < toStart.length(); ++i) {
+        for (int i = 0; i < toStart.length() - l; ++i) {
             result.append('U');
         }
         
-        result.append(toDest);
+        for (int i = l; i < toDest.length(); ++i) {
+            result.append(toDest.charAt(i));
+        }
         
         return result.toString();
     }
