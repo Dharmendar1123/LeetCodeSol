@@ -18,28 +18,14 @@ class Solution {
         if (root == null) {
             return 0;
         }
-        Queue<TreeNode> que = new LinkedList<>();
-        que.offer(root);
-        int level = 1;
         
-        while (!que.isEmpty()) {
-            int n = que.size();
-            while (n-- > 0) {
-                TreeNode node =  que.poll();
-                if (node.left == null && node.right == null) {
-                    return level;
-                }
-                
-                if (node.left != null) {
-                    que.offer(node.left);
-                }
-                if (node.right != null) {
-                    que.offer(node.right);
-                }
-            }
-            level++;
+        if (root.left == null && root.right == null) {
+            return 1;
         }
         
-        return level;
+        int l = root.left != null ? minDepth(root.left) : Integer.MAX_VALUE;
+        int r = root.right != null ? minDepth(root.right) : Integer.MAX_VALUE;
+        
+        return 1 + Math.min(l, r);
     }
 }
