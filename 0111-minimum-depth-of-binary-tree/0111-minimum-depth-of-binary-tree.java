@@ -14,22 +14,32 @@
  * }
  */
 class Solution {
-    int minDepth = Integer.MAX_VALUE;
-    public void solve(TreeNode root, int level) {
-        if (root == null) {
-            return;
-        }
-        
-        if (root.left == null && root.right == null) {
-            minDepth = Math.min(minDepth, level);
-        }
-        
-        solve(root.left, level+1);
-        solve(root.right, level+1);
-    }
     public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        Queue<TreeNode> que = new LinkedList<>();
+        que.offer(root);
         int level = 1;
-        solve(root, level);
-        return minDepth == Integer.MAX_VALUE ? 0 : minDepth;
+        
+        while (!que.isEmpty()) {
+            int n = que.size();
+            while (n-- > 0) {
+                TreeNode node =  que.poll();
+                if (node.left == null && node.right == null) {
+                    return level;
+                }
+                
+                if (node.left != null) {
+                    que.offer(node.left);
+                }
+                if (node.right != null) {
+                    que.offer(node.right);
+                }
+            }
+            level++;
+        }
+        
+        return level;
     }
 }
