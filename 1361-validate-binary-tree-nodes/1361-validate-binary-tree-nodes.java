@@ -1,6 +1,6 @@
 class Solution {
     public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
-        Map<Integer, List<Integer>> adj = new HashMap<>();
+        
         Map<Integer, Integer> childToParent = new HashMap<>();
         
         for (int i = 0; i < n; ++i) {
@@ -9,7 +9,6 @@ class Solution {
             int rightC = rightChild[i];
             
             if (leftC != -1) {
-                adj.computeIfAbsent(node, k -> new ArrayList<>()).add(leftC);
                 if (childToParent.containsKey(leftC)) {
                     return false;
                 }else {
@@ -18,7 +17,6 @@ class Solution {
             }
             
             if (rightC != -1) {
-                adj.computeIfAbsent(node, k -> new ArrayList<>()).add(rightC);
                 if (childToParent.containsKey(rightC)) {
                     return false;
                 }else {
@@ -44,19 +42,22 @@ class Solution {
         
         boolean[] visited = new boolean[n];
         Queue<Integer> que = new LinkedList<>();
-        int count = 1;
+        int count = 0;
         que.offer(root);
-        visited[root] = true;
         
         while (!que.isEmpty()) {
             int node = que.poll();
-            
-            for (int child : adj.getOrDefault(node, new ArrayList<>())) {
-                if (!visited[child]) {
-                    que.offer(child);
-                    visited[child] = true;
-                    count++;
-                }
+            if (visited[node]) {
+                return false;
+            }
+            visited[node] = true;
+            count++;
+            if (leftChild[node] != -1) {
+                que.offer(leftChild[node]);
+            }
+
+            if (rightChild[node] != -1) {
+                que.offer(rightChild[node]);
             }
         }
         return count == n;
