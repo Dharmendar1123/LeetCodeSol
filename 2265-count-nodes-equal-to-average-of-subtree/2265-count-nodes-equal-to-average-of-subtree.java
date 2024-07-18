@@ -16,32 +16,28 @@
 class Solution {
     int result;
     
-    public int findSum(TreeNode root, int[] count) {
+    public Pair<Integer, Integer> solve(TreeNode root) {
         if (root == null) {
-            return 0;
+            return new Pair<>(0, 0);
         }
         
-        count[0]++;
+        Pair<Integer, Integer> left = solve(root.left);
+        Pair<Integer, Integer> right = solve(root.right);
         
-        int leftSum = findSum(root.left, count);
-        int rightSum = findSum(root.right, count);
+        int leftSum = left.getKey();
+        int leftCount = left.getValue();
         
-        return root.val + leftSum + rightSum;
-    }
-    
-    public void solve(TreeNode root) {
-        if (root == null) {
-            return;
-        }
+        int rightSum = right.getKey();
+        int rightCount = right.getValue();
         
-        int[] count = {0};
-        int sum = findSum(root, count);
-        if (sum/count[0] == root.val) {
+        int totalSum = root.val + leftSum + rightSum;
+        int totalCount = 1 + leftCount + rightCount;
+        
+        if (totalSum/totalCount == root.val) {
             result++;
         }
         
-        solve(root.left);
-        solve(root.right);
+        return new Pair<>(totalSum, totalCount);
     }
     
     public int averageOfSubtree(TreeNode root) {
