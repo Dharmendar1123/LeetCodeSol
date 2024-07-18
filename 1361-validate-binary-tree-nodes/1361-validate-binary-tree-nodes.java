@@ -1,4 +1,13 @@
 class Solution {
+
+    public int count(int root, int[] leftChild, int[] rightChild) {
+        if (root == -1) {
+            return 0;
+        }
+
+        return 1 + count(leftChild[root], leftChild, rightChild) + count(rightChild[root], leftChild, rightChild);
+    }
+
     public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
         
         // Map<Integer, Integer> childToParent = new HashMap<>();
@@ -57,26 +66,28 @@ class Solution {
             return false;
         }
         
-        boolean[] visited = new boolean[n];
-        Queue<Integer> que = new LinkedList<>();
-        int count = 0;
-        que.offer(root);
+        // boolean[] visited = new boolean[n];
+        // Queue<Integer> que = new LinkedList<>();
+        // int count = 0;
+        // que.offer(root);
         
-        while (!que.isEmpty()) {
-            int node = que.poll();
-            if (visited[node]) {
-                return false;
-            }
-            visited[node] = true;
-            count++;
-            if (leftChild[node] != -1) {
-                que.offer(leftChild[node]);
-            }
+        // while (!que.isEmpty()) {
+        //     int node = que.poll();
+        //     if (visited[node]) {
+        //         return false;
+        //     }
+        //     visited[node] = true;
+        //     count++;
+        //     if (leftChild[node] != -1) {
+        //         que.offer(leftChild[node]);
+        //     }
 
-            if (rightChild[node] != -1) {
-                que.offer(rightChild[node]);
-            }
-        }
-        return count == n;
+        //     if (rightChild[node] != -1) {
+        //         que.offer(rightChild[node]);
+        //     }
+        // }
+        // return count == n;
+        
+        return count(root, leftChild, rightChild) == n;
     }
 }
