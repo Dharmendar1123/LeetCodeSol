@@ -16,19 +16,19 @@
 class Solution {
     int result;
     
-    public Pair<Integer, Integer> solve(TreeNode root) {
+    public int[] solve(TreeNode root) {
         if (root == null) {
-            return new Pair<>(0, 0);
+            return new int[]{0, 0};
         }
         
-        Pair<Integer, Integer> left = solve(root.left);
-        Pair<Integer, Integer> right = solve(root.right);
+        int[] left = solve(root.left);
+        int[] right = solve(root.right);
         
-        int leftSum = left.getKey();
-        int leftCount = left.getValue();
+        int leftSum = left[0];
+        int leftCount = left[1];
         
-        int rightSum = right.getKey();
-        int rightCount = right.getValue();
+        int rightSum = right[0];
+        int rightCount = right[1];
         
         int totalSum = root.val + leftSum + rightSum;
         int totalCount = 1 + leftCount + rightCount;
@@ -37,7 +37,7 @@ class Solution {
             result++;
         }
         
-        return new Pair<>(totalSum, totalCount);
+        return new int[]{totalSum, totalCount};
     }
     
     public int averageOfSubtree(TreeNode root) {
