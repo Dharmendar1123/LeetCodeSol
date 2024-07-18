@@ -15,19 +15,29 @@
  */
 class Solution {
 
-    public void solve(TreeNode root, List<Integer> ans) {
-        if (root == null) {
-            return;
-        }
-
-        solve(root.left, ans);
-        ans.add(root.val);
-        solve(root.right, ans);
-    }
-
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
-        solve(root, ans);
+        
+        TreeNode curr = root;
+        TreeNode pre;
+        
+        while (curr != null) {
+            if (curr.left == null) {
+                ans.add(curr.val);
+                curr = curr.right;
+            }else {
+                pre = curr.left;
+                
+                while (pre.right != null) {
+                    pre = pre.right;
+                }
+                
+                pre.right = curr;
+                TreeNode temp = curr;
+                curr = curr.left;
+                temp.left = null;
+            }
+        }
         return ans;
     }
 }
