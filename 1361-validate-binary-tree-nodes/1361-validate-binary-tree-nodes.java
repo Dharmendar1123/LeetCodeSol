@@ -1,7 +1,8 @@
 class Solution {
     public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
         
-        Map<Integer, Integer> childToParent = new HashMap<>();
+        // Map<Integer, Integer> childToParent = new HashMap<>();
+        int[] childToParent = new int[n];
         
         for (int i = 0; i < n; ++i) {
             int node = i;
@@ -9,30 +10,46 @@ class Solution {
             int rightC = rightChild[i];
             
             if (leftC != -1) {
-                if (childToParent.containsKey(leftC)) {
+                // if (childToParent.containsKey(leftC)) {
+                //     return false;
+                // }else {
+                //     childToParent.put(leftC, node);
+                // }
+                if (childToParent[leftC] != 0) {
                     return false;
                 }else {
-                    childToParent.put(leftC, node);
+                    childToParent[leftC]++;
                 }
             }
             
             if (rightC != -1) {
-                if (childToParent.containsKey(rightC)) {
+                // if (childToParent.containsKey(rightC)) {
+                //     return false;
+                // }else {
+                //     childToParent.put(rightC, node);
+                // }
+                if (childToParent[rightC] != 0) {
                     return false;
                 }else {
-                    childToParent.put(rightC, node);
+                    childToParent[rightC]++;
                 }
             }
         }
         
         int root = -1;
         for (int i = 0; i < n; ++i) {
-            if (!childToParent.containsKey(i)) {
-                if (root != -1) {
-                    return false;
-                }else {
-                    root = i;
-                }
+            // if (!childToParent.containsKey(i)) {
+            //     if (root != -1) {
+            //         return false;
+            //     }else {
+            //         root = i;
+            //     }
+            // }
+            if (childToParent[i] > 1) {
+                return false;
+            }
+            if (childToParent[i] == 0) {
+                root = i;
             }
         }
         
