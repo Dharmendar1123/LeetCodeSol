@@ -54,11 +54,12 @@ class Solution {
             //         root = i;
             //     }
             // }
-            if (childToParent[i] > 1) {
-                return false;
-            }
             if (childToParent[i] == 0) {
-                root = i;
+                if (root != -1) {
+                    return false;
+                }else {
+                    root = i;
+                }
             }
         }
         
