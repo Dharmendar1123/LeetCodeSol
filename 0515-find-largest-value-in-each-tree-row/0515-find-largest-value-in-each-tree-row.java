@@ -14,30 +14,30 @@
  * }
  */
 class Solution {
-    public List<Integer> largestValues(TreeNode root) {
-        List<Integer> result = new ArrayList<>();
+    
+    public void dfs(TreeNode root, Map<Integer, Integer> map, int level) {
         if (root == null) {
-            return result;
+            return;
         }
         
-        Queue<TreeNode> que = new LinkedList<>();
-        que.offer(root);
+        if (map.containsKey(level)) {
+            map.put(level, Math.max(map.get(level), root.val));
+        }else {
+            map.put(level, root.val);
+        }
         
-        while(!que.isEmpty()) {
-            int n = que.size();
-            int maxEle = Integer.MIN_VALUE;
-            while (n-- > 0) {
-                TreeNode node = que.poll();
-                maxEle = Math.max(maxEle, node.val);
-                if (node.left != null) {
-                    que.offer(node.left);
-                }
-                
-                if (node.right != null) {
-                    que.offer(node.right);
-                }
-            }
-            result.add(maxEle);
+        
+        dfs(root.left, map, level+1);
+        dfs(root.right, map, level+1);
+    }
+    
+    public List<Integer> largestValues(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        dfs(root, map, 0);
+        
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            result.add(entry.getValue());
         }
         return result;
     }
