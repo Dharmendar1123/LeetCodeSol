@@ -41,6 +41,7 @@ class Solution {
             
             while (n-- > 0) {
                 TreeNode node = que.poll();
+                
                 if (node.left != null && !set.contains(node.left.val)) {
                     que.offer(node.left);
                     set.add(node.left.val);
