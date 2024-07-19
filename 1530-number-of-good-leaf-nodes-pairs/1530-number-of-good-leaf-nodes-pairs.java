@@ -17,9 +17,7 @@ class Solution {
     
     public List<Integer> solve(TreeNode root, int dis, int[] goodLeaf) {
         if (root == null) {
-            List<Integer> empty = new ArrayList<>();
-            empty.add(0);
-            return empty;
+            return new ArrayList<>();
         }
         
         if (root.left == null && root.right == null) {
@@ -33,7 +31,7 @@ class Solution {
         
         for (int l : leftDis) {
             for (int r : rightDis) {
-                if (l != 0 && r != 0 && l+r <= dis) {
+                if (l+r <= dis) {
                     goodLeaf[0]++;
                 }
             }
@@ -41,13 +39,13 @@ class Solution {
         
         List<Integer> currentDis = new ArrayList<>();
         for (int ld : leftDis) {
-            if (ld != 0 && ld + 1 <= dis) {
+            if (ld + 1 < dis) {
                 currentDis.add(ld+1);
             }
         }
         
         for (int rd : rightDis) {
-            if (rd != 0 && rd + 1 <= dis) {
+            if (rd + 1 < dis) {
                 currentDis.add(rd+1);
             }
         }
