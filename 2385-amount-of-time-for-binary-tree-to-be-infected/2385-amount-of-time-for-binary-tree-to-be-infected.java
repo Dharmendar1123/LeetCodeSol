@@ -26,23 +26,18 @@
 1, 10, 6/ 5/ 4/ 9, 2/
 */
 class Solution {
-    TreeNode startNode;
-    public void makeGraph(TreeNode root, TreeNode prev, Map<TreeNode, List<TreeNode>> adj, int start) {
+    public void makeGraph(TreeNode root, TreeNode prev, Map<Integer, List<Integer>> adj) {
         if (root == null) {
             return;
         }
         
         if (prev != null) {
-            adj.computeIfAbsent(root, k -> new ArrayList<>()).add(prev);
-            adj.computeIfAbsent(prev, k -> new ArrayList<>()).add(root);
+            adj.computeIfAbsent(root.val, k -> new ArrayList<>()).add(prev.val);
+            adj.computeIfAbsent(prev.val, k -> new ArrayList<>()).add(root.val);
         }
         
-        if (start == root.val) {
-            startNode = root;
-        }
-        
-        makeGraph(root.left, root, adj, start);
-        makeGraph(root.right, root, adj, start);
+        makeGraph(root.left, root, adj);
+        makeGraph(root.right, root, adj);
         
     }
     
@@ -50,22 +45,22 @@ class Solution {
         if (root == null) {
             return 0;
         }
-        Map<TreeNode, List<TreeNode>> adj = new HashMap<>();
-        startNode = null;
-        makeGraph(root, null, adj, start);
+        Map<Integer, List<Integer>> adj = new HashMap<>();
         
-        Queue<TreeNode> que = new LinkedList<>();
-        Set<TreeNode> visited = new HashSet<>();
-        que.offer(startNode);
-        visited.add(startNode);
+        makeGraph(root, null, adj);
+        
+        Queue<Integer> que = new LinkedList<>();
+        Set<Integer> visited = new HashSet<>();
+        que.offer(start);
+        visited.add(start);
         int time = 0;
         
         while (!que.isEmpty()) {
             int n = que.size();
             while (n-- > 0) {
-                TreeNode node = que.poll();
+                int node = que.poll();
                 
-                for (TreeNode neigh : adj.getOrDefault(node, new ArrayList<>())) {
+                for (int neigh : adj.getOrDefault(node, new ArrayList<>())) {
                     if (!visited.contains(neigh)) {
                         que.offer(neigh);
                         visited.add(neigh);
