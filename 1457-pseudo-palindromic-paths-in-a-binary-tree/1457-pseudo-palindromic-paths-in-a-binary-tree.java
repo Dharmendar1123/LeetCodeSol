@@ -16,20 +16,15 @@
 class Solution {
     int result = 0;
     
-    public void solve(TreeNode root, int[] count) {
+    public void solve(TreeNode root, int count) {
         if (root == null) {
             return;
         }
-        count[root.val]++;
+        
+        count = (count ^ (1 << root.val));
         
         if (root.left == null && root.right == null) {
-            int oddFreq = 0;
-            for (int i = 1; i <= 9; ++i) {
-                if (count[i] % 2 != 0) {
-                    oddFreq++;
-                }
-            }
-            if (oddFreq <= 1) {
+            if ((count & (count-1)) == 0) {
                 result++;
             }
         }
@@ -37,12 +32,12 @@ class Solution {
         solve(root.left, count);
         solve(root.right, count);
         
-        count[root.val]--;
     }
     
     public int pseudoPalindromicPaths (TreeNode root) {
-        int[] count = new int[10];
-        solve(root, count);
+        
+        solve(root, 0);
+        
         return result;
     }
 }
