@@ -13,63 +13,31 @@
  *     }
  * }
  */
-
-/*
-1 - [5, 3]
-5 - [1, 4]
-4 - [5, 9, 2]
-9 - [4]
-2 - [4]
-3 - [1, 10, 6]
-10 - [3]
-6 - [3]
-1, 10, 6/ 5/ 4/ 9, 2/
-*/
 class Solution {
-    public void makeGraph(TreeNode root, TreeNode prev, Map<Integer, List<Integer>> adj) {
-        if (root == null) {
-            return;
-        }
-        
-        if (prev != null) {
-            adj.computeIfAbsent(root.val, k -> new ArrayList<>()).add(prev.val);
-            adj.computeIfAbsent(prev.val, k -> new ArrayList<>()).add(root.val);
-        }
-        
-        makeGraph(root.left, root, adj);
-        makeGraph(root.right, root, adj);
-        
-    }
+    int result = Integer.MIN_VALUE;
     
-    public int amountOfTime(TreeNode root, int start) {
+    public int solve(TreeNode root, int start) {
         if (root == null) {
             return 0;
         }
-        Map<Integer, List<Integer>> adj = new HashMap<>();
         
-        makeGraph(root, null, adj);
+        int lh = solve(root.left, start);
+        int rh = solve(root.right, start);
         
-        Queue<Integer> que = new LinkedList<>();
-        Set<Integer> visited = new HashSet<>();
-        que.offer(start);
-        visited.add(start);
-        int time = 0;
-        
-        while (!que.isEmpty()) {
-            int n = que.size();
-            while (n-- > 0) {
-                int node = que.poll();
-                
-                for (int neigh : adj.getOrDefault(node, new ArrayList<>())) {
-                    if (!visited.contains(neigh)) {
-                        que.offer(neigh);
-                        visited.add(neigh);
-                    }
-                }
-            }
-            time++;
+        if (root.val == start) {
+            result = Math.max(lh, rh);
+            return -1;
+        }else if (lh >= 0 && rh >= 0) {
+            return Math.max(lh, rh) + 1;
+        }else {
+            int d = Math.abs(lh) + Math.abs(rh);
+            result = Math.max(result, d);
+            return Math.min(lh, rh) - 1;
         }
-        
-        return time-1;
+    }
+    
+    public int amountOfTime(TreeNode root, int start) {
+        solve(root, start);
+        return result;
     }
 }
