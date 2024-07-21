@@ -20,13 +20,16 @@ class Solution {
         
         int result = 0;
         while (!que.isEmpty()) {
-            TreeNode node = que.poll();
-            result = node.val;
-            if (node.right != null) {
-                que.offer(node.right);
-            }
-            if (node.left != null) {
-                que.offer(node.left);
+            int n = que.size();
+            while (n-- > 0) {
+                TreeNode node = que.poll();
+                result = node.val;
+                if (node.right != null) {
+                    que.offer(node.right);
+                }
+                if (node.left != null) {
+                    que.offer(node.left);
+                }
             }
         }
         return result;
