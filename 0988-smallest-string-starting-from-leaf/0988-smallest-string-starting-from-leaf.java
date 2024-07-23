@@ -14,31 +14,30 @@
  * }
  */
 class Solution {
-    String result;
-    
-    private void solve(TreeNode root, StringBuilder curr) {
-        if (root == null) {
-            return; 
-        }
+    public String smallestFromLeaf(TreeNode root) {
+        Queue<Pair<TreeNode, String>> que = new LinkedList<>();
+        String result = "";
+        que.offer(new Pair<>(root, String.valueOf((char)(root.val + 'a'))));
         
-        curr.insert(0, (char)(root.val + 'a'));
-        
-        if (root.left == null && root.right == null) {
-            if (result.equals("") || result.compareTo(curr.toString()) > 0) {
-                result = curr.toString();
+        while (!que.isEmpty()) {
+            Pair<TreeNode, String> pair = que.poll();
+            TreeNode node = pair.getKey();
+            String curr = pair.getValue();
+            
+            if (node.left == null && node.right == null) {
+                if (result.equals("") || result.compareTo(curr) > 0) {
+                    result = curr;
+                }
             }
             
+            if (node.left != null) {
+                que.offer(new Pair<>(node.left, (char)(node.left.val + 'a') + curr));
+            }
+            
+            if (node.right != null) {
+                que.offer(new Pair<>(node.right, (char)(node.right.val + 'a') + curr));
+            }
         }
-        
-        solve(root.left, curr);
-        solve(root.right, curr);
-        
-        curr.deleteCharAt(0);
-    }
-    
-    public String smallestFromLeaf(TreeNode root) {
-        result = "";
-        solve(root, new StringBuilder());
         return result;
     }
 }
