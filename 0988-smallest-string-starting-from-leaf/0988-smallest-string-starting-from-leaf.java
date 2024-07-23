@@ -15,29 +15,32 @@
  */
 class Solution {
     public String smallestFromLeaf(TreeNode root) {
-        Queue<Pair<TreeNode, String>> que = new LinkedList<>();
-        String result = "";
-        que.offer(new Pair<>(root, String.valueOf((char)(root.val + 'a'))));
+        Queue<Pair<TreeNode, StringBuilder>> que = new LinkedList<>();
+        StringBuilder result = new StringBuilder();
+        que.offer(new Pair<>(root, new StringBuilder().append((char)(root.val + 'a'))));
         
         while (!que.isEmpty()) {
-            Pair<TreeNode, String> pair = que.poll();
+            Pair<TreeNode, StringBuilder> pair = que.poll();
             TreeNode node = pair.getKey();
-            String curr = pair.getValue();
+            StringBuilder curr = pair.getValue();
             
             if (node.left == null && node.right == null) {
-                if (result.equals("") || result.compareTo(curr) > 0) {
-                    result = curr;
+                String currStr = curr.toString();
+                if (result.length() == 0 || result.toString().compareTo(currStr) > 0) {
+                    result.setLength(0);
+                    result.append(currStr);
                 }
             }
             
             if (node.left != null) {
-                que.offer(new Pair<>(node.left, (char)(node.left.val + 'a') + curr));
+                que.offer(new Pair<>(node.left, new StringBuilder(curr).insert(0, (char)(node.left.val + 'a'))));
             }
             
             if (node.right != null) {
-                que.offer(new Pair<>(node.right, (char)(node.right.val + 'a') + curr));
+                que.offer(new Pair<>(node.right, new StringBuilder(curr).insert(0, (char)(node.right.val + 'a'))));
             }
         }
-        return result;
+        
+        return result.toString();
     }
 }
