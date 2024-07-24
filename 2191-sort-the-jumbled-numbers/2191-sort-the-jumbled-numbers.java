@@ -10,12 +10,24 @@ class Solution {
         }
     }
     
-    private String getMappedNum(String num, int[] mapping) {
-        StringBuilder mappedNum = new StringBuilder();
-        for (char ch : num.toCharArray()) {
-            mappedNum.append(mapping[ch - '0']);
+    private int getMappedNum(int num, int[] mapping) {
+        if (num < 10) {
+            return mapping[num];
         }
-        return mappedNum.toString();
+        
+        int mappedNum = 0;
+        int placeValue = 1;
+        
+        while (num > 0) {
+            int lastDigit = num % 10;
+            int mappedDigit = mapping[lastDigit];
+            mappedNum += placeValue * mappedDigit;
+            
+            placeValue *= 10;
+            num /= 10;
+        }
+        
+        return mappedNum;
     }
     
     public int[] sortJumbled(int[] mapping, int[] nums) {
@@ -23,9 +35,7 @@ class Solution {
         List<Pair> vec = new ArrayList<>();
         
         for (int i = 0; i < n; ++i) {
-            String numStr = Integer.toString(nums[i]);
-            String mappedStr = getMappedNum(numStr, mapping);
-            int mappedNum = Integer.parseInt(mappedStr);
+            int mappedNum = getMappedNum(nums[i], mapping);
             vec.add(new Pair(mappedNum, i));
         }
         
