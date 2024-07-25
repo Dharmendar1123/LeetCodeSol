@@ -1,35 +1,34 @@
 class Solution {
-    private int[] nums;
-    public static void max_heap(int[] nums, int n, int parent) {
-        int left = 2*parent + 1;
-        int right = 2*parent + 2;
-        int large = parent;
-        if (left < n && nums[large] < nums[left]) {
-            large = left;
-        }
-        if (right < n && nums[large] < nums[right]) {
-            large = right;
-        }
-        
-        if (large != parent) {
-            int temp = nums[large];
-            nums[large] = nums[parent];
-            nums[parent] = temp;
-            max_heap(nums, n, large);
-        }
-    }
     public int[] sortArray(int[] nums) {
-        int n = nums.length;
-        for (int i = (n/2)-1; i >= 0; --i) {
-            max_heap(nums, n, i);
+        int minE = Integer.MAX_VALUE;
+        int maxE = Integer.MIN_VALUE;
+
+        for (int num : nums) {
+            if (num < minE) {
+                minE = num;
+            }
+            if (num > maxE) {
+                maxE = num;
+            }
         }
-        
-        for (int i = n-1; i >= 0; --i) {
-            int temp = nums[0];
-            nums[0] = nums[i];
-            nums[i] = temp;
-            max_heap(nums, i, 0);
+
+        // Frequency array for range [minE, maxE]
+        int[] frequency = new int[maxE - minE + 1];
+
+        // Count the frequency of each number
+        for (int num : nums) {
+            frequency[num - minE]++;
         }
+
+        // Reconstruct the sorted array
+        int index = 0;
+        for (int num = minE; num <= maxE; num++) {
+            while (frequency[num - minE] > 0) {
+                nums[index++] = num;
+                frequency[num - minE]--;
+            }
+        }
+
         return nums;
     }
 }
