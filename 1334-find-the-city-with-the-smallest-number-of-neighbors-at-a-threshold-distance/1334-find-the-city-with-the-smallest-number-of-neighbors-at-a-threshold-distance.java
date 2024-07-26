@@ -1,21 +1,10 @@
 class Solution {
-    void bellmanFord(int n, int[][] edges, int[] shortestPathDistances, int source) {
-        Arrays.fill(shortestPathDistances, Integer.MAX_VALUE);
-        shortestPathDistances[source] = 0;
-
-        for (int i = 1; i < n; i++) {
-            for (int[] edge : edges) {
-                int u = edge[0];
-                int v = edge[1];
-                int wt = edge[2];
-                if (shortestPathDistances[u] != Integer.MAX_VALUE && 
-                    shortestPathDistances[u] + wt < shortestPathDistances[v]) {
-                    shortestPathDistances[v] = shortestPathDistances[u] + wt;
-                }
-                // Bi-directional edge
-                if (shortestPathDistances[v] != Integer.MAX_VALUE && 
-                    shortestPathDistances[v] + wt < shortestPathDistances[u]) {
-                    shortestPathDistances[u] = shortestPathDistances[v] + wt;
+    void floydWarshall(int n, int[][] shortestPathMatrix) {
+        for (int via = 0; via < n; via++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    shortestPathMatrix[i][j] = Math.min(shortestPathMatrix[i][j],
+                                                        shortestPathMatrix[i][via] + shortestPathMatrix[via][j]);
                 }
             }
         }
@@ -44,8 +33,9 @@ class Solution {
     public int findTheCity(int n, int[][] edges, int distanceThreshold) {
         int[][] shortestPathMatrix = new int[n][n];
 
+        // Initialize the shortest path matrix with large values
         for (int i = 0; i < n; i++) {
-            Arrays.fill(shortestPathMatrix[i], Integer.MAX_VALUE);
+            Arrays.fill(shortestPathMatrix[i], (int) 1e9 + 7);
             shortestPathMatrix[i][i] = 0;  // Distance to itself is zero
         }
 
@@ -57,10 +47,8 @@ class Solution {
             shortestPathMatrix[v][u] = wt;
         }
 
-        // Compute shortest paths from each city using Bellman-Ford algorithm
-        for (int i = 0; i < n; i++) {
-            bellmanFord(n, edges, shortestPathMatrix[i], i);
-        }
+        // Compute shortest paths using Floyd-Warshall algorithm
+        floydWarshall(n, shortestPathMatrix);
 
         return getCityWithFewestReachable(n, shortestPathMatrix, distanceThreshold);
     }
