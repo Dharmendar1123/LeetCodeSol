@@ -1,69 +1,39 @@
 class Solution {
-    
-    static class Pair {
-        int key;
-        char value;
-
-        public Pair(int key, char value) {
-            this.key = key;
-            this.value = value;
+    private void FloydWarshall(long[][] distances, char[] original, char[] changed, int[] cost) {
+        for (int i = 0; i < original.length; ++i) {
+            int s = original[i] - 'a';
+            int t = changed[i] - 'a';
+            distances[s][t] = Math.min(distances[s][t], (long) cost[i]);
         }
 
-        public int getKey() {
-            return key;
-        }
-
-        public char getValue() {
-            return value;
-        }
-    }
-    
-    void dijkstra(Map<Character, ArrayList<Pair>> adj, char source, int[][] distances) {
-        PriorityQueue<Pair> pq = new PriorityQueue<>(Comparator.comparingInt(Pair::getKey));
-        pq.add(new Pair(0, source));
-
-        while (!pq.isEmpty()) {
-            Pair current = pq.poll();
-            int d = current.getKey();
-            char node = current.getValue();
-
-            for (Pair child : adj.getOrDefault(node, new ArrayList<>())) {
-                char adjNode = child.getValue();
-                int distance = child.getKey();
-
-                if (distances[source - 'a'][adjNode - 'a'] > distance + d) {
-                    distances[source - 'a'][adjNode - 'a'] = distance + d;
-                    pq.add(new Pair(distance + d, adjNode));
+        for (int k = 0; k < 26; ++k) {
+            for (int i = 0; i < 26; ++i) {
+                for (int j = 0; j < 26; ++j) {
+                    distances[i][j] = Math.min(distances[i][j], distances[i][k] + distances[k][j]);
                 }
             }
         }
     }
-    
+
     public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
-        Map<Character, ArrayList<Pair>> adj = new HashMap<>();
-
-        for (int i = 0; i < original.length; i++) {
-            adj.computeIfAbsent(original[i], k -> new ArrayList<>()).add(new Pair(cost[i], changed[i]));
-        }
-
-        int[][] distances = new int[26][26];
+        long[][] distances = new long[26][26];
         for (int i = 0; i < 26; i++) {
             Arrays.fill(distances[i], Integer.MAX_VALUE);
         }
 
-        // Populate distances using Dijkstra's
-        for (char it : original) {
-            dijkstra(adj, it, distances);
-        }
+        FloydWarshall(distances, original, changed, cost);
 
         long ans = 0;
         for (int i = 0; i < source.length(); i++) {
-            if (source.charAt(i) == target.charAt(i)) continue;
+            if (source.charAt(i) == target.charAt(i)) {
+                continue;
+            }
 
-            if (distances[source.charAt(i) - 'a'][target.charAt(i) - 'a'] == Integer.MAX_VALUE)
+            if (distances[source.charAt(i) - 'a'][target.charAt(i) - 'a'] == Integer.MAX_VALUE) {
                 return -1;
-
-            else ans += distances[source.charAt(i) - 'a'][target.charAt(i) - 'a'];
+            } else {
+                ans += distances[source.charAt(i) - 'a'][target.charAt(i) - 'a'];
+            }
         }
 
         return ans;
