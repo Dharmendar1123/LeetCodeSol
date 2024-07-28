@@ -16,15 +16,16 @@ class Solution {
         Arrays.fill(d1, Integer.MAX_VALUE);
         Arrays.fill(d2, Integer.MAX_VALUE);
 
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
-        pq.offer(new int[]{0, 1});
+        Queue<int[]> que = new LinkedList<>();
+        que.offer(new int[]{1, 1}); // Visited node 1 once
         d1[1] = 0;
 
-        while (!pq.isEmpty()) {
-            int[] curr = pq.poll();
-            int timePassed = curr[0];
-            int node = curr[1];
+        while (!que.isEmpty()) {
+            int[] curr = que.poll();
+            int node = curr[0];
+            int freq = curr[1];
 
+            int timePassed = (freq == 1) ? d1[node] : d2[node];
             if (d2[n] != Integer.MAX_VALUE && node == n) { // We reached n 2nd time means it's the second minimum
                 return d2[n];
             }
@@ -35,13 +36,12 @@ class Solution {
             }
 
             for (int nbr : adj.get(node)) {
-                if (d1[nbr] > timePassed + time) { // +time for this edge to reach nbr
-                    d2[nbr] = d1[nbr];
+                if (d1[nbr] == Integer.MAX_VALUE) {
                     d1[nbr] = timePassed + time;
-                    pq.offer(new int[]{timePassed + time, nbr});
-                } else if (d2[nbr] > timePassed + time && d1[nbr] != timePassed + time) {
+                    que.offer(new int[]{nbr, 1});
+                } else if (d2[nbr] == Integer.MAX_VALUE && d1[nbr] != timePassed + time) {
                     d2[nbr] = timePassed + time;
-                    pq.offer(new int[]{timePassed + time, nbr});
+                    que.offer(new int[]{nbr, 2});
                 }
             }
         }
