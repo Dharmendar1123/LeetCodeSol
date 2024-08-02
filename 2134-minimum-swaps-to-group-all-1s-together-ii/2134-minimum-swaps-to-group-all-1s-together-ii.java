@@ -1,27 +1,31 @@
 class Solution {
     public int minSwaps(int[] nums) {
-        int n = nums.length;
-        
-        int countOnes = Arrays.stream(nums).sum();
-        
-        int i = 0;
-        int j = 0;
-        int currCount = 0;
-        int maxCount = 0;
-        
-        while (j < 2*n) {
-            if (nums[j%n] == 1) {
-                currCount++;
-            }
-            
-            if (j - i + 1 > countOnes) {
-                currCount -= nums[i%n];
-                i++;
-            }
-            
-            maxCount = Math.max(maxCount, currCount);
-            j++;
+
+        int n = nums.length, ones = 0;
+        int[] circular = new int[n * 2];
+        for(int i = 0; i < n; ++i) {
+            circular[i] = circular[i + n] = nums[i];
+            ones += nums[i];
         }
-        return countOnes - maxCount;
+
+        int maxOnes = 0, curOnes = 0, i = 0, j = 0;
+        for(j = 0; j < ones; ++j) {
+            curOnes += circular[j];
+        }
+
+        if(maxOnes < curOnes) {
+            maxOnes = curOnes;
+        }
+
+        while(j < circular.length) {
+            curOnes = curOnes - circular[i] + circular[j];
+            if(maxOnes < curOnes) {
+                maxOnes = curOnes;
+            }
+            ++j;
+            ++i;
+        }
+
+        return ones - maxOnes;
     }
 }
