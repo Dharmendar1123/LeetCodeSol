@@ -1,15 +1,21 @@
 class Solution {
     public boolean canBeEqual(int[] target, int[] arr) {
-        int n = target.length;
+        HashMap<Integer, Integer> map = new HashMap<>();
         
-        Arrays.sort(target);
-        Arrays.sort(arr);
+        for (int num : arr) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
         
-        for (int i = 0; i < n; ++i) {
-            if (target[i] != arr[i]) {
+        for (int num : target) {
+            if (!map.containsKey(num)) {
                 return false;
             }
+            map.put(num, map.get(num) - 1);
+            if (map.get(num) == 0) {
+                map.remove(num);
+            }
         }
-        return true;
+        
+        return map.isEmpty();
     }
 }
