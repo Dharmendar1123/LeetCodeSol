@@ -1,7 +1,14 @@
 class Solution {
     public int rangeSum(int[] nums, int n, int left, int right) {
         int mod = (int)1e9 + 7;
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        PriorityQueue<int[]> pq = new PriorityQueue<>(
+            new Comparator<int[]>() {
+                @Override
+                public int compare(int[] o1, int[] o2) {
+                    return o1[0] - o2[0];
+                }
+            }
+        );
         
         for (int i = 0; i < n; ++i) {
             pq.offer(new int[] {nums[i], i});
