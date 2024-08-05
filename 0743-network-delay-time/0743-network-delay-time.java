@@ -1,13 +1,17 @@
 class Solution {
     public int networkDelayTime(int[][] times, int n, int k) {
-        Map<Integer, List<int[]>> adj = new HashMap<>();
+        List<List<int[]>> adj = new ArrayList<>();
+        
+        for (int i = 0; i <= n; ++i) {
+            adj.add(new ArrayList<>());
+        }
         
         for (int[] edge : times) {
             int u = edge[0];
             int v = edge[1];
             int wt = edge[2];
             
-            adj.computeIfAbsent(u, val -> new ArrayList<>()).add(new int[] {v, wt});
+            adj.get(u).add(new int[] {v, wt});
         }
         
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
@@ -22,7 +26,7 @@ class Solution {
             int d = curr[0];
             int node = curr[1];
             
-            for (int[] v : adj.getOrDefault(node, new ArrayList<>())) {
+            for (int[] v : adj.get(node)) {
                 int adjNode = v[0];
                 int dist = v[1];
                 
