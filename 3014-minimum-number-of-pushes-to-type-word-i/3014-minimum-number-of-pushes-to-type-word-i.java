@@ -1,21 +1,24 @@
 class Solution {
     public int minimumPushes(String word) {
-        int result = 0;
-        int[] map = new int[10];
-        
-        int assignKey = 2;
-        
-        for (int i = 0; i < word.length(); ++i) {
-            if (assignKey > 9) {
-                assignKey = 2;
-            }
-            
-            map[assignKey]++;
-            result += map[assignKey];
-            
-            assignKey++;
+        int[] freq = new int[26];
+        for (char ch : word.toCharArray()) {
+            freq[ch - 'a']++;
         }
         
+        Arrays.sort(freq);
+        
+        for (int i = 0, j = freq.length - 1, tmp; i < j; i++, j--) {
+            tmp = freq[i];
+            freq[i] = freq[j];
+            freq[j] = tmp;
+        }
+        int result = 0;
+        
+        for (int i = 0; i < 26; ++i) {
+            int occ = freq[i];
+            int press = i/8 + 1;
+            result += press * occ;
+        }
         return result;
     }
 }
