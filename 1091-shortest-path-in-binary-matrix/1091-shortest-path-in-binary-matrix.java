@@ -9,7 +9,7 @@ class Solution {
         
         int[][] directions = {{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}};
         
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        Queue<int[]> pq = new LinkedList<>();
         int[][] result = new int[m][n];
         for (int[] row : result) {
             Arrays.fill(row, Integer.MAX_VALUE);
