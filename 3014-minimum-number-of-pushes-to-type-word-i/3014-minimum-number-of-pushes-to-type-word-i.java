@@ -1,7 +1,7 @@
 class Solution {
     public int minimumPushes(String word) {
         int result = 0;
-        int[] map = new int[10];
+        Map<Integer, Integer> map = new HashMap<>();
         
         int assignKey = 2;
         
@@ -10,8 +10,9 @@ class Solution {
                 assignKey = 2;
             }
             
-            map[assignKey]++;
-            result += map[assignKey];
+            map.put(assignKey, map.getOrDefault(assignKey, 0) + 1);
+            
+            result += map.get(assignKey);
             
             assignKey++;
         }
