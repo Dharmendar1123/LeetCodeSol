@@ -9,7 +9,7 @@ class Solution {
             Arrays.fill(row, Integer.MAX_VALUE);
         }
         
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        PriorityQueue<int[]> pq = new PriorityQueue<>((x, y) -> x[0] - y[0]);
         
         result[0][0] = 0;
         pq.offer(new int[] {0, 0, 0});
