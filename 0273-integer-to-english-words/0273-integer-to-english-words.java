@@ -14,32 +14,62 @@ class Solution {
         "Sixty", "Seventy", "Eighty", "Ninety"
     };
     
-    private String solve(int num) {
+    private void solve(int num, StringBuilder sb) {
         if (num < 10) {
-            return belowTen[num];
+            sb.append(belowTen[num]);
+            return;
         }
         
         if (num < 20) {
-            return belowTwenty[num - 10];
+            sb.append(belowTwenty[num - 10]);
+            return;
         }
         
         if (num < 100) {
-            return belowHundred[num / 10] + ((num % 10 != 0) ? " " + belowTen[num % 10] : "");
+            sb.append(belowHundred[num / 10]);
+            if (num % 10 != 0) {
+                sb.append(" ");
+                solve(num % 10, sb);
+            }
+            return;
         }
         
         if (num < 1000) {
-            return solve(num / 100) + " Hundred" + ((num % 100 != 0) ? " " + solve(num % 100) : "");
+            solve(num / 100, sb);
+            sb.append(" Hundred");
+            if (num % 100 != 0) {
+                sb.append(" ");
+                solve(num % 100, sb);
+            }
+            return;
         }
         
         if (num < 1000000) {
-            return solve(num / 1000) + " Thousand" + ((num % 1000 != 0) ? " " + solve(num % 1000) : "");
+            solve(num / 1000, sb);
+            sb.append(" Thousand");
+            if (num % 1000 != 0) {
+                sb.append(" ");
+                solve(num % 1000, sb);
+            }
+            return;
         }
         
         if (num < 1000000000) {
-            return solve(num / 1000000) + " Million" + ((num % 1000000 != 0) ? " " + solve(num % 1000000) : "");
+            solve(num / 1000000, sb);
+            sb.append(" Million");
+            if (num % 1000000 != 0) {
+                sb.append(" ");
+                solve(num % 1000000, sb);
+            }
+            return;
         }
         
-        return solve(num / 1000000000) + " Billion" + (num % 1000000000 != 0 ? " " + solve(num % 1000000000) : "");
+        solve(num / 1000000000, sb);
+        sb.append(" Billion");
+        if (num % 1000000000 != 0) {
+            sb.append(" ");
+            solve(num % 1000000000, sb);
+        }
     }
     
     public String numberToWords(int num) {
@@ -47,6 +77,8 @@ class Solution {
             return "Zero";
         }
         
-        return solve(num);
+        StringBuilder sb = new StringBuilder();
+        solve(num, sb);
+        return sb.toString();
     }
 }
