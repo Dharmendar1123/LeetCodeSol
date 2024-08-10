@@ -19,7 +19,7 @@ class Solution {
                     return level;
                 }
                 
-                for (char ch : "ACGT".toCharArray()) {
+                for (char ch : new char[] {'A', 'C', 'G', 'T'}) {
                     for (int i = 0; i < curr.length(); ++i) {
                         StringBuilder neighbour = new StringBuilder(curr);
                         neighbour.setCharAt(i, ch);
