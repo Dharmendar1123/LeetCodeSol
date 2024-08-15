@@ -1,22 +1,42 @@
 class Solution {
+    
+    public int slidingWindow(int[] nums, int d) {
+        int count = 0;
+        int n = nums.length;
+        int i = 0;
+        int j = 1;
+        
+        while (j < n) {
+            while (nums[j] - nums[i] > d) {
+                i++;
+            }
+            count += j - i;
+            j++;
+        }
+        return count;
+    }
+    
     public int smallestDistancePair(int[] nums, int k) {
         int n = nums.length;
-        int maxEl = Arrays.stream(nums).max().getAsInt();
-        int[] vec = new int[maxEl + 1];
-
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                int d = Math.abs(nums[i] - nums[j]);
-                vec[d]++;
+        Arrays.sort(nums);
+        
+        int l = 0;
+        int r = nums[n-1] - nums[0];
+        
+        int result = 0;
+        
+        while(l <= r){
+            int mid = l + (r - l)/2;
+            
+            int countPair = slidingWindow(nums, mid);
+            
+            if (countPair < k) {
+                l = mid + 1;
+            }else {
+                result = mid;
+                r = mid - 1;
             }
         }
-
-        for (int d = 0; d <= maxEl; d++) {
-            k -= vec[d];
-            if (k <= 0) {
-                return d;
-            }
-        }
-        return -1;
+        return result;
     }
 }
