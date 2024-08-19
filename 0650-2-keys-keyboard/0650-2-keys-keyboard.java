@@ -1,36 +1,33 @@
 class Solution {
-    int[][] t = new int[1001][1001];
-    
-    private int solve(int currCountA, int pasteCountA, int n) {
-        if (currCountA == n) {
-            return 0;
-        }
-
-        if (currCountA > n) {
-            return 1000;
-        }
-
-        if (t[currCountA][pasteCountA] != -1) {
-            return t[currCountA][pasteCountA];
-        }
-
-        int copyPaste = 1 + 1 + solve(currCountA + currCountA, currCountA, n);
-
-        int paste = 1 + solve(currCountA + pasteCountA, pasteCountA, n);
-
-        return t[currCountA][pasteCountA] = Math.min(copyPaste, paste);
-    }
-    
     public int minSteps(int n) {
         if (n == 1)
             return 0;
         
-        for (int i = 0; i < t.length; i++) {
-            for (int j = 0; j < t[i].length; j++) {
-                t[i][j] = -1;
+        
+        if (n == 2)
+            return 2;
+        
+        int[] t = new int[n + 1];
+        
+        t[0] = 0; 
+        t[1] = 0;
+        t[2] = 2;
+        
+        for (int i = 3; i <= n; i++) {
+            int factor = i / 2;
+            while (factor >= 1) {
+                if (i % factor == 0) {
+                    
+                    int steps_to_reach_factor = t[factor];
+                    int copy_that_first = 1;
+                    int paste_frequency = (i / factor) - 1;
+                    
+                    t[i] = t[factor] + copy_that_first + paste_frequency;
+                    break;
+                }
+                factor--;
             }
         }
-
-        return 1 + solve(1, 1, n);
+        return t[n];
     }
 }
