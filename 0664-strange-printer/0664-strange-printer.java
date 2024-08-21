@@ -2,7 +2,7 @@ class Solution {
     int n;
     int[][] dp;
     
-    private int solve(int l, int r, String s) {
+    private int solve(int l, int r, char[] ch) {
         
         if (l == r) {
             return 1;
@@ -17,7 +17,7 @@ class Solution {
         }
         
         int i = l + 1;
-        while (i <= r && s.charAt(i) == s.charAt(l)) {
+        while (i <= r && ch[i] == ch[l]) {
             i++;
         }
         
@@ -25,13 +25,13 @@ class Solution {
             return 1;
         }
         
-        int basic = 1 + solve(i, r, s);
+        int basic = 1 + solve(i, r, ch);
         
         int optimize = Integer.MAX_VALUE;
         
         for (int j = i; j <= r; ++j) {
-            if (s.charAt(j) == s.charAt(l)) {
-                int ans = solve(i, j - 1, s) + solve(j, r, s);
+            if (ch[j] == ch[l]) {
+                int ans = solve(i, j - 1, ch) + solve(j, r, ch);
                 
                 optimize = Math.min(optimize, ans);
             }
@@ -48,6 +48,8 @@ class Solution {
             Arrays.fill(row, -1);
         }
         
-        return solve(0, n-1, s);
+        char[] ch = s.toCharArray();
+        
+        return solve(0, n-1, ch);
     }
 }
