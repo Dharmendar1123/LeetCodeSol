@@ -1,13 +1,15 @@
 class Solution {
     public int findComplement(int num) {
-        if (num == 0) {
-            return 0;
+        int i = 0;
+        int ans = 0;
+        
+        while (num != 0) {
+            if ((num & 1) == 0) {
+                ans |= (1 << i);
+            }
+            num >>= 1;
+            i++;
         }
-        
-        int numBits = (int)(Math.log(num) / Math.log(2)) + 1;
-        
-        int mask = (1 << numBits) - 1;
-        
-        return num ^ mask;
+        return ans;
     }
 }
