@@ -1,28 +1,22 @@
 class Solution {
     
-    private int[] dfs(int curr, int parent, List<Integer>[] adj, int[] result, String labels) {
-        
-        int[] myCount = new int[26];
+    private void solve(int curr, int parent, List<Integer>[] adj, int[] chars, int[] result, String labels) {
         
         char myLabel = labels.charAt(curr);
+        int countBefore = chars[myLabel - 'a'];
         
-        myCount[myLabel - 'a'] = 1;
+        chars[myLabel - 'a']++;
         
-        for (int child : adj[curr]) {
+        for (int child :  adj[curr]) {
             if (child == parent) {
                 continue;
             }
             
-            int[] childCount = new int[26];
-            
-            childCount = dfs(child, curr, adj, result, labels);
-            
-            for (int i = 0; i < 26; ++i) {
-                myCount[i] += childCount[i];
-            }
+            solve(child, curr, adj, chars, result, labels);
         }
-        result[curr] = myCount[myLabel - 'a'];
-        return myCount;
+        
+        int countAfter = chars[myLabel - 'a'];
+        result[curr] = countAfter - countBefore;
     }
     
     public int[] countSubTrees(int n, int[][] edges, String labels) {
@@ -41,8 +35,9 @@ class Solution {
         }
         
         int[] result = new int[n];
+        int[] chars = new int[26];
         
-        dfs(0, -1, adj, result, labels);
+        solve(0, -1, adj, chars, result, labels);
         
         return result;
     }
