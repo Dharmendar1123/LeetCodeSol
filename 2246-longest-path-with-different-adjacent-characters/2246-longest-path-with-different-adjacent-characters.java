@@ -1,31 +1,25 @@
 class Solution {
     int result;
     
-    private int dfs(int curr, int parent, List<Integer>[] adj, String s) {
+    private int dfs(int curr, List<Integer>[] adj, String s) {
         
         int longest = 0;
         int secondLongest = 0;
         
         for (int child : adj[curr]) {
             
-            if (child == parent) {
-                continue;
-            }
+            int childLongest = dfs(child, adj, s);
             
-            int childLongest = dfs(child, curr, adj, s);
+            if (s.charAt(child) != s.charAt(curr)) {
+                if (childLongest > secondLongest) {
+                    secondLongest = childLongest;
+                }
             
-            if (s.charAt(child) == s.charAt(curr)) {
-                continue;
-            }
-            
-            if (childLongest > secondLongest) {
-                secondLongest = childLongest;
-            }
-            
-            if (secondLongest > longest) {
-                int temp = longest;
-                longest = secondLongest;
-                secondLongest = temp;
+                if (secondLongest > longest) {
+                    int temp = longest;
+                    longest = secondLongest;
+                    secondLongest = temp;
+                }
             }
         }
         
@@ -54,11 +48,10 @@ class Solution {
             int u = i;
             int v = parent[i];
             
-            adj[u].add(v);
             adj[v].add(u);
         }
         
-        dfs(0, -1, adj, s);
+        dfs(0, adj, s);
         
         return result;
     }
