@@ -1,13 +1,13 @@
 class Solution {
     
-    private char dfsFindMinChar(char ch, Map<Character, List<Character>> adj, int[] visited) {
-        visited[ch - 'a'] = 1;
+    private char dfsFindMinChar(int ch, List<Integer>[] adj, int[] visited) {
+        visited[ch] = 1;
         
-        char minChar = ch;
+        char minChar = (char)(ch + 'a');
         
-        for (char v : adj.getOrDefault(ch, new ArrayList<>())) {
+        for (int v : adj[ch]) {
             
-            if (visited[v - 'a'] == 0) {
+            if (visited[v] == 0) {
                 minChar = (char)Math.min(minChar, dfsFindMinChar(v, adj, visited));
             }
         }
@@ -18,20 +18,24 @@ class Solution {
         int n = s1.length();
         int m = baseStr.length();
         
-        Map<Character, List<Character>> adj = new HashMap<>();
+        List<Integer>[] adj = new ArrayList[26];
+        
+        for (int i = 0; i < 26; ++i) {
+            adj[i] = new ArrayList<>();
+        }
         
         for (int i = 0; i < n; ++i) {
-            char u = s1.charAt(i);
-            char v = s2.charAt(i);
+            int u = s1.charAt(i) - 'a';
+            int v = s2.charAt(i) - 'a';
             
-            adj.computeIfAbsent(u, k -> new ArrayList<>()).add(v);
-            adj.computeIfAbsent(v, k -> new ArrayList<>()).add(u);
+            adj[u].add(v);
+            adj[v].add(u);
         }
         
         StringBuilder sb = new StringBuilder();
         
         for (int i = 0; i < m; ++i) {
-            char ch = baseStr.charAt(i);
+            int ch = baseStr.charAt(i) - 'a';
             
             int[] visited = new int[26];
             
