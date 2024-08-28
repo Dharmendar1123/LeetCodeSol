@@ -1,57 +1,43 @@
 class Solution {
     
-    private int find(int x, int[] parent) {
-        if (x == parent[x]) {
-            return x;
-        }
+    private void dfs(int u, List<Integer>[] adj, boolean[] visited, long[] size) {
+        visited[u] = true;
+        size[0]++;
         
-        return parent[x] = find(parent[x], parent);
-    }
-    
-    private void union(int x, int y, int[] parent, int[] rank) {
-        int parentX = find(x, parent);
-        int parentY = find(y, parent);
-        
-        if (parentX == parentY) {
-            return;
-        }
-        
-        if (rank[parentX] > rank[parentY]) {
-            parent[parentY] = parentX;
-        }else if (rank[parentX] < rank[parentY]) {
-            parent[parentX] = parentY;
-        }else {
-            parent[parentX] = parentY;
-            rank[parentY]++;
+        for (int v : adj[u]) {
+            if (!visited[v]) {
+                dfs(v, adj, visited, size);
+            }
         }
     }
     
     public long countPairs(int n, int[][] edges) {
-        int[] parent = new int[n];
-        int[] rank = new int[n];
+        List<Integer>[] adj = new ArrayList[n];
         
         for (int i = 0; i < n; ++i) {
-            parent[i] = i;
+            adj[i] = new ArrayList<>();
         }
         
         for (int[] edge : edges) {
-            union(edge[0], edge[1], parent, rank);
+            int u = edge[0];
+            int v = edge[1];
+            
+            adj[u].add(v);
+            adj[v].add(u);
         }
         
-        Map<Integer, Integer> map = new HashMap<>();
+        boolean[] visited = new boolean[n];
+        long result = 0;
+        long remaining = n;
         
         for (int i = 0; i < n; ++i) {
-            map.put(find(i, parent), map.getOrDefault(find(i, parent), 0) + 1);
-        }
-        
-        long result = 0;
-        long remainingNodes = n;
-        
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            int size = entry.getValue();
-            
-            result += size * (remainingNodes - size);
-            remainingNodes -= size;
+            if (!visited[i]) {
+                
+                long[] size = new long[1];
+                dfs(i, adj, visited, size);
+                result += size[0] * (remaining - size[0]);
+                remaining -= size[0];
+            }
         }
         return result;
     }
