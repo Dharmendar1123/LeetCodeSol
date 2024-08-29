@@ -1,7 +1,7 @@
 class Solution {
     
     public int find(int x, int[] parent) {
-        if (parent[x] == -1) {
+        if (x == parent[x]) {
             return x;
         }
         
@@ -32,7 +32,9 @@ class Solution {
         int[] parent = new int[20005];
         int[] rank = new int[20005];
         
-        Arrays.fill(parent, -1);
+        for (int i = 0; i < 20005; ++i) {
+            parent[i] = i;
+        }
         
         for (int[] stone : stones) {
             union(stone[0], stone[1] + 10001, parent, rank);
