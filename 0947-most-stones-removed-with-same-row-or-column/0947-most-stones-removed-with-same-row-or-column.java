@@ -29,22 +29,29 @@ class Solution {
     
     public int removeStones(int[][] stones) {
         
-        int[] parent = new int[20005];
-        int[] rank = new int[20005];
+        int n = stones.length;
+        int[] parent = new int[n];
+        int[] rank = new int[n];
         
-        for (int i = 0; i < 20005; ++i) {
+        for (int i = 0; i < n; ++i) {
             parent[i] = i;
         }
         
-        for (int[] stone : stones) {
-            union(stone[0], stone[1] + 10001, parent, rank);
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (stones[i][0] == stones[j][0] || stones[i][1] == stones[j][1]) {
+                    union(i, j, parent, rank);
+                }
+            }
         }
         
-        Set<Integer> set = new HashSet<>();
-        for (int[] stone : stones) {
-            set.add(find(stone[0], parent));
+        int groups = 0;
+        for (int i = 0; i < n; ++i) {
+            if (parent[i] == i) {
+                groups++;
+            }
         }
         
-        return stones.length - set.size();
+        return n - groups;
     }
 }
