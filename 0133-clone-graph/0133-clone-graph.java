@@ -20,56 +20,33 @@ class Node {
 
 class Solution {
     
-//     private void dfs(Node node, Node cloneNode, Map<Node, Node> map) {
+    private void dfs(Node node, Node cloneNode, Node[] created) {
         
-//         for (Node n : node.neighbors) {
+        created[node.val] = cloneNode;
+        for (Node n : node.neighbors) {
             
-//             if (!map.containsKey(n)) {
-//                 Node clone = new Node(n.val);
-//                 map.put(n, clone);
-//                 cloneNode.neighbors.add(clone);
+            if (created[n.val] == null) {
+                Node clone = new Node(n.val);
+                cloneNode.neighbors.add(clone);
                 
-//                 dfs(n, clone, map);
-//             }else {
-//                    cloneNode.neighbors.add(map.get(n));
-//             }
-//         }
-//     }
-    
-    private void bfs(Queue<Node> que, Map<Node, Node> map) {
-        
-        while (!que.isEmpty()) {
-            
-            Node node = que.poll();
-            Node cloneNode = map.get(node);
-            
-            for (Node n : node.neighbors) {
-                
-                if (!map.containsKey(n)) {
-                    Node clone = new Node(n.val);
-                    map.put(n, clone);
-                    cloneNode.neighbors.add(clone);
-
-                    que.offer(n);
-                }else {
-                       cloneNode.neighbors.add(map.get(n));
-                }
+                dfs(n, clone, created);
+            }else {
+                   cloneNode.neighbors.add(created[n.val]);
             }
         }
     }
+    
     
     public Node cloneGraph(Node node) {
         if (node == null) {
             return null;
         }
         
-        Map<Node, Node> map = new HashMap<>();
         Node cloneNode = new Node(node.val);
-        map.put(node, cloneNode);
         
-        Queue<Node> que = new LinkedList<>();
-        que.offer(node);
-        bfs(que, map);
+        Node[] created = new Node[101];
+        
+        dfs(node, cloneNode, created);
         
         return cloneNode;
     }
