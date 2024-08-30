@@ -20,18 +20,40 @@ class Node {
 
 class Solution {
     
-    private void dfs(Node node, Node cloneNode, Map<Node, Node> map) {
+//     private void dfs(Node node, Node cloneNode, Map<Node, Node> map) {
         
-        for (Node n : node.neighbors) {
+//         for (Node n : node.neighbors) {
             
-            if (!map.containsKey(n)) {
-                Node clone = new Node(n.val);
-                map.put(n, clone);
-                cloneNode.neighbors.add(clone);
+//             if (!map.containsKey(n)) {
+//                 Node clone = new Node(n.val);
+//                 map.put(n, clone);
+//                 cloneNode.neighbors.add(clone);
                 
-                dfs(n, clone, map);
-            }else {
-                   cloneNode.neighbors.add(map.get(n));
+//                 dfs(n, clone, map);
+//             }else {
+//                    cloneNode.neighbors.add(map.get(n));
+//             }
+//         }
+//     }
+    
+    private void bfs(Queue<Node> que, Map<Node, Node> map) {
+        
+        while (!que.isEmpty()) {
+            
+            Node node = que.poll();
+            Node cloneNode = map.get(node);
+            
+            for (Node n : node.neighbors) {
+                
+                if (!map.containsKey(n)) {
+                    Node clone = new Node(n.val);
+                    map.put(n, clone);
+                    cloneNode.neighbors.add(clone);
+
+                    que.offer(n);
+                }else {
+                       cloneNode.neighbors.add(map.get(n));
+                }
             }
         }
     }
@@ -45,7 +67,9 @@ class Solution {
         Node cloneNode = new Node(node.val);
         map.put(node, cloneNode);
         
-        dfs(node, cloneNode, map);
+        Queue<Node> que = new LinkedList<>();
+        que.offer(node);
+        bfs(que, map);
         
         return cloneNode;
     }
