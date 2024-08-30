@@ -14,9 +14,11 @@ class Solution {
         int diff = 0;
         
         int n = s1.length();
+        char[] c1 = s1.toCharArray();
+        char[] c2 = s2.toCharArray();
         
         for (int i = 0; i < n; ++i) {
-            if (s1.charAt(i) != s2.charAt(i)) {
+            if (c1[i] != c2[i]) {
                 diff++;
             }
         }
