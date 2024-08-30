@@ -1,11 +1,19 @@
 class Solution {
     
-    private void dfs(int u, List<Integer>[] adj, boolean[] visited) {
+    private void bfs(int u, List<Integer>[] adj, boolean[] visited) {
+        Queue<Integer> que = new LinkedList<>();
+        que.offer(u);
+        
         visited[u] = true;
         
-        for (int v : adj[u]) {
-            if (!visited[v]) {
-                dfs(v, adj, visited);
+        while (!que.isEmpty()) {
+            int top = que.poll();
+            
+            for (int v : adj[top]) {
+                if (!visited[v]) {
+                    que.offer(v);
+                    visited[v] = true;
+                }
             }
         }
     }
@@ -14,11 +22,9 @@ class Solution {
         int diff = 0;
         
         int n = s1.length();
-        char[] c1 = s1.toCharArray();
-        char[] c2 = s2.toCharArray();
         
         for (int i = 0; i < n; ++i) {
-            if (c1[i] != c2[i]) {
+            if (s1.charAt(i) != s2.charAt(i)) {
                 diff++;
             }
         }
@@ -48,7 +54,7 @@ class Solution {
         
         for (int i = 0; i < n; ++i) {
             if (!visited[i]) {
-                dfs(i, adj, visited);
+                bfs(i, adj, visited);
                 count++;
             }
         }
