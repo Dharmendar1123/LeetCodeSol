@@ -1,20 +1,32 @@
 class Solution {
     
-    private void bfs(int u, List<Integer>[] adj, boolean[] visited) {
-        Queue<Integer> que = new LinkedList<>();
-        que.offer(u);
+    int[] rank;
+    int[] parent;
+    
+    private int find(int x) {
+        if (x == parent[x]) {
+            return x;
+        }
         
-        visited[u] = true;
+        return parent[x] = find(parent[x]);
+    }
+    
+    private void union(int x, int y) {
         
-        while (!que.isEmpty()) {
-            int top = que.poll();
-            
-            for (int v : adj[top]) {
-                if (!visited[v]) {
-                    que.offer(v);
-                    visited[v] = true;
-                }
-            }
+        int parentX = find(x);
+        int parentY = find(y);
+        
+        if (parentX == parentY) {
+            return;
+        }
+        
+        if (rank[parentX] > rank[parentY]) {
+            parent[parentY] = parentX;
+        }else if (rank[parentX] < rank[parentY]) {
+            parent[parentX] = parentY;
+        }else {
+            parent[parentX] = parentY;
+            rank[parentY]++;
         }
     }
     
@@ -33,31 +45,24 @@ class Solution {
     
     public int numSimilarGroups(String[] strs) {
         int n = strs.length;
+        parent = new int[n];
+        rank = new int[n];
         
-        List<Integer>[] adj = new ArrayList[n];
         for (int i = 0; i < n; ++i) {
-            adj[i] = new ArrayList<>();
+            parent[i] = i;
         }
+        
+        int groupCount = n;
         
         for (int i = 0; i < n; ++i) {
             for (int j = i + 1; j < n; ++j) {
-                
-                if (isSimilar(strs[i], strs[j])) {
-                    adj[i].add(j);
-                    adj[j].add(i);
+                if (isSimilar(strs[i], strs[j]) && find(i) != find(j)) {
+                    union(i, j);
+                    groupCount--;
                 }
             }
+            
         }
-        
-        boolean[] visited = new boolean[n];
-        int count = 0;
-        
-        for (int i = 0; i < n; ++i) {
-            if (!visited[i]) {
-                bfs(i, adj, visited);
-                count++;
-            }
-        }
-        return count;
+        return groupCount;
     }
 }
