@@ -7,13 +7,21 @@ class Solution {
         }
         
         int[][] result = new int[m][n];
-        int count = 0;
         
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                result[i][j] = original[count++];
+        int i = 0;
+        int j = 0;
+        
+        for (int val : original) {
+            
+            if (j >= n) {
+                j = 0;
+                i++;
             }
+            
+            result[i][j] = val;
+            j++;
         }
+        
         return result;
     }
 }
