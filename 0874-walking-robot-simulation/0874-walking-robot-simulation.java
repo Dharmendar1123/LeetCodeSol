@@ -15,29 +15,31 @@ class Solution {
 
         // Process each command
         for (int i = 0; i < commands.length; i++) {
+            
             if (commands[i] == -2) { // turn left 90 degrees
                 dir = new int[]{-dir[1], dir[0]};
-            } else if (commands[i] == -1) { // turn right 90 degrees
+                continue;
+            }
+            
+            if (commands[i] == -1) { // turn right 90 degrees
                 dir = new int[]{dir[1], -dir[0]};
-            } else { // move forward step by step
-                for (int step = 0; step < commands[i]; step++) {
-                    int newX = x + dir[0];
-                    int newY = y + dir[1];
+                continue;
+            }
+            
+            for (int step = 0; step < commands[i]; step++) {
+                int newX = x + dir[0];
+                int newY = y + dir[1];
 
-                    String nextKey = newX + "_" + newY;
+                String nextKey = newX + "_" + newY;
 
-                    // If there's an obstacle, stop moving in this direction
-                    if (obstacleSet.contains(nextKey)) {
-                        break;
-                    }
-
-                    // Move to the new position
-                    x = newX;
-                    y = newY;
+                if (obstacleSet.contains(nextKey)) {
+                    break;
                 }
+
+                x = newX;
+                y = newY;
             }
 
-            // Update the maximum distance from the origin
             maxDistance = Math.max(maxDistance, x * x + y * y);
         }
 
