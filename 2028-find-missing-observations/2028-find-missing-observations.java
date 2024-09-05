@@ -10,11 +10,13 @@ class Solution {
             return new int[0];
         }
         
+        int distributeMean = missingSum / n;
+        int ExtraRemaining = missingSum % n;
         int[] result = new int[n];
+        Arrays.fill(result, distributeMean);
         
-        for (int i = 0; i < n; ++i) { 
-            result[i] = Math.min(6, missingSum - (n - i - 1));
-            missingSum -= result[i];
+        for (int i = 0; i < ExtraRemaining; ++i) { 
+            result[i]++;
         }
         
         return result;
