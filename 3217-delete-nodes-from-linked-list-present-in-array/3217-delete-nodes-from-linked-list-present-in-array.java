@@ -10,12 +10,13 @@
  */
 class Solution {
     public ListNode modifiedList(int[] nums, ListNode head) {
-        Set<Integer> set = new HashSet<>();
+        boolean[] seen = new boolean[100001];
+        
         for (int num : nums) {
-            set.add(num);
+            seen[num] = true;
         }
         
-        while (head != null && set.contains(head.val)) {
+        while (head != null && seen[head.val]) {
             head = head.next;
         }
         
@@ -23,7 +24,7 @@ class Solution {
         ListNode curr = head;
         
         while (curr != null) {
-            if (!set.contains(curr.val)) {
+            if (!seen[curr.val]) {
                 prev = curr;
                 curr = curr.next;
             }else {
