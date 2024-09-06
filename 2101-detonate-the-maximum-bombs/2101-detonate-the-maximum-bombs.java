@@ -1,27 +1,32 @@
 class Solution {
+    int n;
     
     private int bfs(int u, List<Integer>[] adj) {
         Queue<Integer> que = new LinkedList<>();
         que.offer(u);
         
-        Set<Integer> visited = new HashSet<>();
-        visited.add(u);
+        // Set<Integer> visited = new HashSet<>();
+        boolean[] visited = new boolean[n];
+        // visited.add(u);
+        visited[u] = true;
+        int count = 1;
         
         while (!que.isEmpty()) {
             int top = que.poll();
             
             for (int v : adj[top]) {
-                if (!visited.contains(v)) {
+                if (!visited[v]) {
                     que.offer(v);
-                    visited.add(v);
+                    visited[v] = true;
+                    count++;
                 }
             }
         }
-        return visited.size();
+        return count;
     }
     
     public int maximumDetonation(int[][] bombs) {
-        int n = bombs.length;
+        n = bombs.length;
         
         List<Integer>[] adj = new ArrayList[n];
         for (int i = 0; i < n; ++i) {
