@@ -15,19 +15,22 @@ class Solution {
             set.add(num);
         }
         
-        ListNode p1 = null;
-        ListNode p2 = head;
+        while (head != null && set.contains(head.val)) {
+            head = head.next;
+        }
         
-        while (p2 != null) {
-            if (set.contains(p2.val) && p1 == null) {
-                p2 = p2.next;
-                head = p2;
-            }else if (set.contains(p2.val) && p1 != null) {
-                p2 = p2.next;
-                p1.next = p2;
+        ListNode prev = null;
+        ListNode curr = head;
+        
+        while (curr != null) {
+            if (!set.contains(curr.val)) {
+                prev = curr;
+                curr = curr.next;
             }else {
-                p1 = p2;
-                p2 = p2.next;
+                if (prev != null) {
+                    prev.next = curr.next;
+                }
+                curr = curr.next;
             }
         }
         return head;
