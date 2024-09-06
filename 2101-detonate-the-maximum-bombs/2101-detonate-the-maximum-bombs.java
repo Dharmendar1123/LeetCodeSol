@@ -1,13 +1,23 @@
 class Solution {
     
-    private void dfs(int u, Set<Integer> visited, List<Integer>[] adj) {
+    private int bfs(int u, List<Integer>[] adj) {
+        Queue<Integer> que = new LinkedList<>();
+        que.offer(u);
+        
+        Set<Integer> visited = new HashSet<>();
         visited.add(u);
         
-        for (int v : adj[u]) {
-            if(!visited.contains(v)) {
-                dfs(v, visited, adj);
+        while (!que.isEmpty()) {
+            int top = que.poll();
+            
+            for (int v : adj[top]) {
+                if (!visited.contains(v)) {
+                    que.offer(v);
+                    visited.add(v);
+                }
             }
         }
+        return visited.size();
     }
     
     public int maximumDetonation(int[][] bombs) {
@@ -46,10 +56,9 @@ class Solution {
         
         
         for (int i = 0; i < n; ++i) {
-            Set<Integer> visited = new HashSet<>();
-            dfs(i, visited, adj);
+           
+             int count = bfs(i, adj);
             
-            int count = visited.size();
             result = Math.max(result, count);
             
         }
