@@ -1,14 +1,19 @@
 class Solution {
     public int maximalNetworkRank(int n, int[][] roads) {
-        Map<Integer, HashSet<Integer>> adj = new HashMap<>();
+        int[] degree = new int[n];
+        
+        boolean[][] connected = new boolean[n][n];
         
         for (int[] road : roads) {
             
             int u = road[0];
             int v = road[1];
             
-            adj.computeIfAbsent(u, k -> new HashSet<>()).add(v);
-            adj.computeIfAbsent(v, k -> new HashSet<>()).add(u);
+            degree[u]++;
+            degree[v]++;
+            
+            connected[u][v] = true;
+            connected[v][u] = true;
             
         }
         
@@ -17,12 +22,12 @@ class Solution {
         for (int i = 0; i < n; ++i) {
             for (int j = i + 1; j < n; ++j) {
                 
-                int iRank = adj.getOrDefault(i, new HashSet<>()).size();
-                int jRank = adj.getOrDefault(j, new HashSet<>()).size();
+                int iRank = degree[i];
+                int jRank = degree[j];
                 
                 int rank = iRank + jRank;
                 
-                if (adj.getOrDefault(i, new HashSet<>()).contains(j)) {
+                if (connected[i][j]) {
                     rank--;
                 }
                 
