@@ -23,19 +23,13 @@ class Solution {
             return head;
         }
         
-        ListNode currNode = head;
-        ListNode nextNode = head.next;
+        ListNode temp = insertGreatestCommonDivisors(head.next);
         
-        while (nextNode != null) {
-            
-            ListNode temp = new ListNode(gcd(currNode.val, nextNode.val));
-            
-            currNode.next = temp;
-            temp.next = nextNode;
-            
-            currNode = nextNode;
-            nextNode = nextNode.next;
-        }
+        ListNode gcdNode = new ListNode(gcd(head.val, head.next.val));
+        
+        gcdNode.next = temp;
+        head.next = gcdNode;
+        
         return head;
     }
 }
