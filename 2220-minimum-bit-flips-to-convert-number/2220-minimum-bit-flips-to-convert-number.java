@@ -4,8 +4,8 @@ class Solution {
         
         int n = start ^ goal;
         while (n != 0) {
-            res += (n & 1);
-            n = n >> 1;
+            n = n & (n - 1);
+            res++;
         }
         return res;
     }
