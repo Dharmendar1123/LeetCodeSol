@@ -45,9 +45,12 @@ class Solution {
         int sum = 0;
         
         UnionFind uf = new UnionFind(N);
+        int connectEdge = 0;
+        
         if (add != -1) {
             uf.union(adj[add][0], adj[add][1]);
             sum += adj[add][2];
+            connectEdge++;
         }
         
         for (int i = 0; i < adj.length; ++i) {
@@ -66,13 +69,12 @@ class Solution {
             if (parentU != parentV) {
                 uf.union(u, v);
                 sum += wt;
+                connectEdge++;
             }
         }
         
-        for (int i = 0; i < N; ++i) {
-            if (uf.find(i) != uf.find(0)) {
-                return Integer.MAX_VALUE;
-            }
+        if (connectEdge != N-1) {
+            return Integer.MAX_VALUE;
         }
         return sum;
     }
