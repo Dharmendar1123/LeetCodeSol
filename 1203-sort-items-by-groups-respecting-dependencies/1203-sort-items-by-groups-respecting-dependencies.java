@@ -1,6 +1,6 @@
 class Solution {
     
-    private List<Integer> topoSort(Map<Integer, List<Integer>> adj, int[] indegree) {
+    private List<Integer> topoSort(List<Integer>[] adj, int[] indegree) {
         
         Queue<Integer> que = new LinkedList<>();
         for (int i = 0; i < indegree.length; ++i) {
@@ -15,7 +15,7 @@ class Solution {
             int top = que.poll();
             result.add(top);
             
-            for (int v : adj.get(top)) {
+            for (int v : adj[top]) {
                 indegree[v]--;
                 
                 if (indegree[v] == 0) {
@@ -23,7 +23,8 @@ class Solution {
                 }
             }
         }
-        return result.size() == adj.size() ? result : new ArrayList<>();
+        // Check cycle
+        return result.size() == adj.length ? result : new ArrayList<>();
     }
     
     public int[] sortItems(int n, int m, int[] group, List<List<Integer>> beforeItems) {
@@ -34,29 +35,29 @@ class Solution {
             }
         }
         
-        Map<Integer, List<Integer>> itemGraph = new HashMap<>();
+        List<Integer>[] itemGraph = new List[n];
         int[] itemIndegree = new int[n];
         for (int i = 0; i < n; ++i) {
-            itemGraph.put(i, new ArrayList<>());
+            itemGraph[i] = new ArrayList<>();
         }
         
-        Map<Integer, List<Integer>> groupGraph = new HashMap<>();
+        List<Integer>[] groupGraph = new List[m];
         int[] groupIndegree = new int[m];
         for (int i = 0; i < m; ++i) {
-            groupGraph.put(i, new ArrayList<>());
+            groupGraph[i] = new ArrayList<>();
         }
         
         for (int i = 0; i < n; ++i) {
             for (int prev : beforeItems.get(i)) {
                 
-                itemGraph.get(prev).add(i);
+                itemGraph[prev].add(i);
                 itemIndegree[i]++;
                 
                 if (group[i] != group[prev]) {
                     int prevGroup = group[prev];
                     int currGroup = group[i];
                     
-                    groupGraph.get(prevGroup).add(currGroup);
+                    groupGraph[prevGroup].add(currGroup);
                     groupIndegree[currGroup]++;
                 }
             }
@@ -65,16 +66,19 @@ class Solution {
         List<Integer> itemOrder = topoSort(itemGraph, itemIndegree);
         List<Integer> groupOrder = topoSort(groupGraph, groupIndegree);
         
-        Map<Integer, List<Integer>> groupToItem = new HashMap<>();
+        List<Integer>[] groupToItem = new List[m];
+        for (int i = 0; i < m; ++i) {
+            groupToItem[i] = new ArrayList<>();
+        }
         
         for (int item : itemOrder) {
             int itemGroup = group[item];
-            groupToItem.computeIfAbsent(itemGroup, k -> new ArrayList<>()).add(item);
+            groupToItem[itemGroup].add(item);
         }
         
         List<Integer> answerList = new ArrayList<>();
         for (int groupIndex : groupOrder) {
-            answerList.addAll(groupToItem.getOrDefault(groupIndex, new ArrayList<>()));
+            answerList.addAll(groupToItem[groupIndex]);
         }
         
         return answerList.stream().mapToInt(Integer::intValue).toArray();
