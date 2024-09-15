@@ -1,6 +1,7 @@
 class Solution {
     public int findTheLongestSubstring(String s) {
         int n = s.length();
+        char[] chars = s.toCharArray();
         
         Map<Integer, Integer> map = new HashMap<>();
         int mask = 0;
@@ -11,16 +12,22 @@ class Solution {
         
         for (int i = 0; i < n; ++i) {
             
-            if (s.charAt(i) == 'a') {
-                mask = (mask ^ (1 << 0));
-            }else if (s.charAt(i) == 'e') {
-                mask = (mask ^ (1 << 1));
-            }else if (s.charAt(i) == 'i') {
-                mask = (mask ^ (1 << 2));
-            }else if (s.charAt(i) == 'o') {
-                mask = (mask ^ (1 << 3));
-            }else if (s.charAt(i) == 'u') {
-                mask = (mask ^ (1 << 4));
+            switch (chars[i]) {
+                case 'a': 
+                    mask = (mask ^ (1 << 0));
+                    break;
+                case 'e':
+                    mask = (mask ^ (1 << 1));
+                    break;
+                case 'i':
+                    mask = (mask ^ (1 << 2));
+                    break;
+                case 'o':
+                    mask = (mask ^ (1 << 3));
+                    break;
+                case 'u':
+                    mask = (mask ^ (1 << 4));
+                    break;
             }
             
             if (map.containsKey(mask)) {
