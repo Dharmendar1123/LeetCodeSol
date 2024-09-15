@@ -26,7 +26,6 @@ class Solution {
             currState = "";
             StringBuilder sb = new StringBuilder();
             for (int j = 0; j < 5; ++j) {
-                currState += state[j];
                 sb.append(state[j]);
             }
             currState = sb.toString();
