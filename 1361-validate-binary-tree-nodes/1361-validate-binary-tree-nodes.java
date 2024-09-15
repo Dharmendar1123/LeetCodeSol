@@ -1,94 +1,53 @@
 class Solution {
-
-    public int count(int root, int[] leftChild, int[] rightChild) {
-        if (root == -1) {
-            return 0;
+    int[] parent;
+    int component;
+    
+    private int find(int x) {
+        if (parent[x] == x) {
+            return x;
         }
-
-        return 1 + count(leftChild[root], leftChild, rightChild) + count(rightChild[root], leftChild, rightChild);
+        
+        return parent[x] = find(parent[x]);
     }
-
-    public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
+    
+    private boolean union(int par, int child) {
         
-        // Map<Integer, Integer> childToParent = new HashMap<>();
-        int[] childToParent = new int[n];
-        
-        for (int i = 0; i < n; ++i) {
-            int node = i;
-            int leftC = leftChild[i];
-            int rightC = rightChild[i];
-            
-            if (leftC != -1) {
-                // if (childToParent.containsKey(leftC)) {
-                //     return false;
-                // }else {
-                //     childToParent.put(leftC, node);
-                // }
-                if (childToParent[leftC] != 0) {
-                    return false;
-                }else {
-                    childToParent[leftC]++;
-                }
-            }
-            
-            if (rightC != -1) {
-                // if (childToParent.containsKey(rightC)) {
-                //     return false;
-                // }else {
-                //     childToParent.put(rightC, node);
-                // }
-                if (childToParent[rightC] != 0) {
-                    return false;
-                }else {
-                    childToParent[rightC]++;
-                }
-            }
-        }
-        
-        int root = -1;
-        for (int i = 0; i < n; ++i) {
-            // if (!childToParent.containsKey(i)) {
-            //     if (root != -1) {
-            //         return false;
-            //     }else {
-            //         root = i;
-            //     }
-            // }
-            if (childToParent[i] == 0) {
-                if (root != -1) {
-                    return false;
-                }else {
-                    root = i;
-                }
-            }
-        }
-        
-        if (root == -1) {
+        if (find(child) != child) {
             return false;
         }
         
-        // boolean[] visited = new boolean[n];
-        // Queue<Integer> que = new LinkedList<>();
-        // int count = 0;
-        // que.offer(root);
+        if (find(par) == child) {
+            return false;
+        }
         
-        // while (!que.isEmpty()) {
-        //     int node = que.poll();
-        //     if (visited[node]) {
-        //         return false;
-        //     }
-        //     visited[node] = true;
-        //     count++;
-        //     if (leftChild[node] != -1) {
-        //         que.offer(leftChild[node]);
-        //     }
-
-        //     if (rightChild[node] != -1) {
-        //         que.offer(rightChild[node]);
-        //     }
-        // }
-        // return count == n;
+        parent[child] = par;
+        component--;
         
-        return count(root, leftChild, rightChild) == n;
+        return true;
+    }
+    
+    public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {
+        component = n;
+        parent = new int[n];
+        
+        for (int i = 0; i < n; ++i) {
+            parent[i] = i;
+        }
+        
+        for (int i = 0; i < n; ++i) {
+            
+            int node = i;
+            int lc = leftChild[i];
+            int rc = rightChild[i];
+            
+            if (lc != -1 && union(node, lc) == false) {
+                return false;
+            }
+            
+            if (rc != -1 && union(node, rc) == false) {
+                return false;
+            }
+        }
+        return component == 1;
     }
 }
