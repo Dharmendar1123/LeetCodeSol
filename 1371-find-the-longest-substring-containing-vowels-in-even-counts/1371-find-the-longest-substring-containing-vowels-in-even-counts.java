@@ -2,9 +2,9 @@ class Solution {
     public int findTheLongestSubstring(String s) {
         int n = s.length();
         
-        Map<String, Integer> map = new HashMap<>();
-        String currState = "00000";
-        map.put(currState, -1);
+        Map<Integer, Integer> map = new HashMap<>();
+        int mask = 0;
+        map.put(mask, -1);
         
         int[] state = new int[5];
         int result = 0;
@@ -12,27 +12,21 @@ class Solution {
         for (int i = 0; i < n; ++i) {
             
             if (s.charAt(i) == 'a') {
-                state[0] = (state[0] ^ 1);
+                mask = (mask ^ (1 << 0));
             }else if (s.charAt(i) == 'e') {
-                state[1] = (state[1] ^ 1);
+                mask = (mask ^ (1 << 1));
             }else if (s.charAt(i) == 'i') {
-                state[2] = (state[2] ^ 1);
+                mask = (mask ^ (1 << 2));
             }else if (s.charAt(i) == 'o') {
-                state[3] = (state[3] ^ 1);
+                mask = (mask ^ (1 << 3));
             }else if (s.charAt(i) == 'u') {
-                state[4] = (state[4] ^ 1);
+                mask = (mask ^ (1 << 4));
             }
             
-            StringBuilder sb = new StringBuilder();
-            for (int j = 0; j < 5; ++j) {
-                sb.append(state[j]);
-            }
-            currState = sb.toString();
-            
-            if (map.containsKey(currState)) {
-                result = Math.max(result, i - map.get(currState));
+            if (map.containsKey(mask)) {
+                result = Math.max(result, i - map.get(mask));
             }else {
-                map.put(currState, i);
+                map.put(mask, i);
             }
         }
         return result;
