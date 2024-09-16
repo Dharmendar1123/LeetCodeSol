@@ -1,28 +1,38 @@
 class Solution {
+    
+    private int convertToMinutes(String time) {
+        return ((time.charAt(0) - '0') * 10 + (time.charAt(1) - '0')) * 60 
+             + (time.charAt(3) - '0') * 10 + (time.charAt(4) - '0');
+    }
+    
     public int findMinDifference(List<String> timePoints) {
-        int n = timePoints.size();
-        int[] minutes = new int[n];
+        if (timePoints.size() > 1440) return 0; 
+
+        boolean[] seen = new boolean[1440]; 
         
-        for (int i = 0; i < n; ++i) {
-            String time = timePoints.get(i);
-            
-            String[] parts = time.split(":");
-            
-            int hour = Integer.parseInt(parts[0]);
-            int mins = Integer.parseInt(parts[1]);
-            
-            minutes[i] = (hour * 60) + mins;
+        for (String time : timePoints) {
+            int minutes = convertToMinutes(time);
+            if (seen[minutes]) return 0; 
+            seen[minutes] = true;
         }
         
-        Arrays.sort(minutes);
-        int result = Integer.MAX_VALUE;
+        int first = Integer.MAX_VALUE, prev = Integer.MAX_VALUE;
+        int minDiff = Integer.MAX_VALUE;
         
-        for (int i = 1; i < n; ++i) {
-            result = Math.min(result, minutes[i] - minutes[i-1]);
+        for (int i = 0; i < 1440; i++) {
+            if (seen[i]) {
+                if (first == Integer.MAX_VALUE) {
+                    first = i;
+                } else {
+                    minDiff = Math.min(minDiff, i - prev);
+                }
+                prev = i;
+            }
         }
         
-        result = Math.min(result, (24 * 60 - minutes[n-1]) + minutes[0]);
+
+        minDiff = Math.min(minDiff, 1440 - prev + first);
         
-        return result;
+        return minDiff;
     }
 }
