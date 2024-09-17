@@ -12,6 +12,10 @@ class Solution {
             }
         }
         
+        if (!adj.containsKey(source) || !adj.containsKey(target)) {
+            return -1;
+        }
+        
         Queue<Integer> que = new LinkedList<>();
         boolean[] visited = new boolean[501];
         
