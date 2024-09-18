@@ -1,21 +1,46 @@
 class Solution {
+    
+    private int compare(String a, String b) {
+        int i = 0;
+        int j = 0;
+        int l1 = a.length();
+        int l2 = b.length();
+        
+        while (i < l1 || j < l2) {
+            i = i % l1;
+            j = j % l2;
+            
+            if (a.charAt(i) > b.charAt(j)) {
+                return -1;
+            }
+            if (a.charAt(i) < b.charAt(j)) {
+                return 1;
+            }
+            i++;
+            j++;
+        }
+        return 0;
+    }
+    
+    private boolean allZeros(String s) {
+        for (char ch : s.toCharArray()) {
+            if (ch != '0') {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     public String largestNumber(int[] nums) {
-        Integer[] numsAsInteger = Arrays.stream(nums).boxed().toArray(Integer[]::new);
-        
-        Arrays.sort(numsAsInteger, (a, b) -> {
-            String s1 = Integer.toString(a);
-            String s2 = Integer.toString(b);
-            return (s2 + s1).compareTo(s1 + s2);
-        });
-        
-        if (numsAsInteger[0] == 0) {
+        List<String> list = new ArrayList<>();
+        for (int i : nums) {
+            list.add(String.valueOf(i));
+        }
+        Collections.sort(list, (a, b) -> compare(a, b));
+        String ans = String.join("", list);
+        if (allZeros(ans)) {
             return "0";
         }
-        
-        StringBuilder result = new StringBuilder();
-        for (int num : numsAsInteger) {
-            result.append(num);
-        }
-        return result.toString();
+        return ans;
     }
 }
