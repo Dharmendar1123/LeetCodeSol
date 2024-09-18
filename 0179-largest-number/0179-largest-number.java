@@ -32,12 +32,14 @@ class Solution {
     }
     
     public String largestNumber(int[] nums) {
-        List<String> list = new ArrayList<>();
-        for (int i : nums) {
-            list.add(String.valueOf(i));
+        // List<String> list = new ArrayList<>();
+        String[] str = new String[nums.length];
+        for (int i = 0; i < nums.length; ++i) {
+            // list.add(String.valueOf(i));
+            str[i] = String.valueOf(nums[i]);
         }
-        Collections.sort(list, (a, b) -> compare(a, b));
-        String ans = String.join("", list);
+        Arrays.sort(str, (a, b) -> compare(a, b));
+        String ans = String.join("", str);
         if (allZeros(ans)) {
             return "0";
         }
