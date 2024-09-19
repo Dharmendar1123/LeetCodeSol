@@ -1,13 +1,18 @@
 class Solution {
     
-    private List<Integer> backTrack(String exp, int left, int right) {
+    public List<Integer> diffWaysToCompute(String expression) {
         List<Integer> res = new ArrayList<>();
         
-        for (int i = left; i <= right; ++i) {
-            char op = exp.charAt(i);
+        for (int i = 0; i < expression.length(); ++i) {
+            char op = expression.charAt(i);
+            
             if (op == '+' || op == '-' || op == '*') {
-                List<Integer> nums1 = backTrack(exp, left, i - 1);
-                List<Integer> nums2 = backTrack(exp, i + 1, right);
+                
+                String left = expression.substring(0, i);
+                String right = expression.substring(i + 1);
+                
+                List<Integer> nums1 = diffWaysToCompute(left);
+                List<Integer> nums2 = diffWaysToCompute(right);
                 
                 for (int n1 : nums1) {
                     for (int n2 : nums2) {
@@ -28,12 +33,8 @@ class Solution {
         }
         
         if (res.isEmpty()) {
-            res.add(Integer.parseInt(exp.substring(left, right + 1)));
+            res.add(Integer.parseInt(expression));
         }
         return res;
-    }
-    
-    public List<Integer> diffWaysToCompute(String expression) {
-        return backTrack(expression, 0, expression.length() - 1);
     }
 }
