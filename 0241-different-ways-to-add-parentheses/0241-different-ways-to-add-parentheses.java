@@ -1,10 +1,24 @@
 class Solution {
     
     public List<Integer> diffWaysToCompute(String expression) {
+        char[] exp = expression.toCharArray();
         List<Integer> res = new ArrayList<>();
         
+        if (expression.length() == 0) {
+            return res;
+        }
+        
+        if (expression.length() == 1) {
+            res.add(Integer.parseInt(expression));
+            return res;
+        }
+        if (expression.length() == 2 && Character.isDigit(exp[0])) {
+            res.add(Integer.parseInt(expression));
+            return res;
+        }
+        
         for (int i = 0; i < expression.length(); ++i) {
-            char op = expression.charAt(i);
+            char op = exp[i];
             
             if (op == '+' || op == '-' || op == '*') {
                 
@@ -30,10 +44,6 @@ class Solution {
                     }
                 }
             }
-        }
-        
-        if (res.isEmpty()) {
-            res.add(Integer.parseInt(expression));
         }
         return res;
     }
