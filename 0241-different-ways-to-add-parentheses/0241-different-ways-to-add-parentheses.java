@@ -20,7 +20,8 @@ class Solution {
         for (int i = 0; i < expression.length(); ++i) {
             char op = exp[i];
             
-            if (op == '+' || op == '-' || op == '*') {
+            if (Character.isDigit(op)) continue;
+            
                 
                 String left = expression.substring(0, i);
                 String right = expression.substring(i + 1);
@@ -30,20 +31,22 @@ class Solution {
                 
                 for (int n1 : nums1) {
                     for (int n2 : nums2) {
+                        int computedResult = 0;
+                        
                         switch(op) {
                             case '+':
-                                res.add(n1 + n2);
+                                computedResult = n1 + n2;
                                 break;
                             case '-':
-                                res.add(n1 - n2);
+                                computedResult = n1 - n2;
                                 break;
                             case '*':
-                                res.add(n1 * n2);
+                                computedResult = n1 * n2;
                                 break;
                         }
+                        res.add(computedResult);
                     }
                 }
-            }
         }
         return res;
     }
