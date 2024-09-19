@@ -1,5 +1,11 @@
 class Solution {
-    private void FloydWarshall(long[][] distances, char[] original, char[] changed, int[] cost) {
+
+    public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
+        long[][] distances = new long[26][26];
+        for (int i = 0; i < 26; i++) {
+            Arrays.fill(distances[i], Integer.MAX_VALUE);
+        }
+
         for (int i = 0; i < original.length; ++i) {
             int s = original[i] - 'a';
             int t = changed[i] - 'a';
@@ -13,15 +19,6 @@ class Solution {
                 }
             }
         }
-    }
-
-    public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
-        long[][] distances = new long[26][26];
-        for (int i = 0; i < 26; i++) {
-            Arrays.fill(distances[i], Integer.MAX_VALUE);
-        }
-
-        FloydWarshall(distances, original, changed, cost);
 
         long ans = 0;
         for (int i = 0; i < source.length(); i++) {
