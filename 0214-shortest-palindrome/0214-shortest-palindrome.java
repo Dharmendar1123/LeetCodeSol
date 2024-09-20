@@ -1,28 +1,12 @@
 class Solution {
-    
-    private boolean isPalindrome(String s, int l, int r) {
-        while (l < r) {
-            if (s.charAt(l) != s.charAt(r)) {
-                return false;
-            }
-            l++;
-            r--;
-        }
-        return true;
-    }
-    
     public String shortestPalindrome(String s) {
-        if (s == null || s.length() == 0) {
-            return s;
-        }
+        String reverse = new StringBuilder(s).reverse().toString();
         
-        for (int r = s.length() - 1; r >= 0; --r) {
-            if (isPalindrome(s, 0, r)) {
-                String suffix = s.substring(r + 1);
-                String reverseSuffix = new StringBuilder(suffix).reverse().toString();
-                return reverseSuffix + s;
+        for (int i = 0; i < s.length(); ++i) {
+            if (s.substring(0, s.length() - i).equals(reverse.substring(i))) {
+                return reverse.substring(0, i) + s;
             }
         }
-        return s;
+        return reverse + s;
     }
 }
