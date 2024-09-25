@@ -2,12 +2,10 @@ class Solution {
     
     class TrieNode {
         int countP = 0;
-        TrieNode[] children = new TrieNode[26];
+        TrieNode[] children;
         
         public TrieNode() {
-            for (int i = 0; i < 26; ++i) {
-                children[i] = null;
-            }
+            children = new TrieNode[26];
             countP = 0;
         }
     }
