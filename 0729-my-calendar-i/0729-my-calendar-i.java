@@ -1,19 +1,26 @@
 class MyCalendar {
     
-    List<int[]> calendar;
+    TreeSet<int[]> st;
 
     public MyCalendar() {
-        calendar = new ArrayList<>();
+        st = new TreeSet<>((a, b) -> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]); 
     }
     
     public boolean book(int start, int end) {
-        for (int[] curr : calendar) {
-            if (!(end <= curr[0] || start >= curr[1])) {
-                return false;
-            }
+        
+        int[] event = new int[] {start, end};
+        int[] next = st.ceiling(event);
+        
+        if (next != null && next[0] < end) {
+            return false;
         }
         
-        calendar.add(new int[] {start, end});
+        int[] prev = st.floor(event);
+        if (prev != null && start < prev[1]) {
+            return false;
+        }
+        
+        st.add(event);
         return true;
     }
 }
